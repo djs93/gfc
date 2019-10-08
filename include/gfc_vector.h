@@ -338,4 +338,12 @@ void vector3d_rotate_about_x(Vector3D *vect, float angle);
 void vector3d_rotate_about_y(Vector3D *vect, float angle);
 void vector3d_rotate_about_z(Vector3D *vect, float angle);
 
+/**
+ * @brief rotate a Vector4D about an axis
+ * @param out output result
+ * @param radians how far to rotate
+ * @param axis the axis to rotate around
+ */
+void vector4d_rotate(Vector4D* out, float radians, Vector3D axis);
+
 #endif

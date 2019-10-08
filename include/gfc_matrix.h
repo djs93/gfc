@@ -118,4 +118,11 @@ void gfc_matrix_rotate(
     Vector3D    axis
 );
 
+/**
+* @brief return a matrix based on the given rotation
+* @param out the output matrix
+* @param rotation the rotation wished to be applied to the matrix
+*/
+void gfc_matrix_from_rotation(Matrix4 out, Vector4D rotation);
+
 #endif

@@ -236,3 +236,30 @@ void gfc_matrix_translate(
     gfc_matrix_multiply(temp,translate,out);
     gfc_matrix_copy(out,temp);
 }
+
+void gfc_matrix_from_rotation(Matrix4 out, Vector4D rotation) {
+	float a = rotation.w;
+	float b = rotation.x;
+	float c = rotation.y;
+	float d = rotation.z;
+	float a2 = a * a;
+	float b2 = b * b;
+	float c2 = c * c;
+	float d2 = d * d;
+
+	out[0][0] = a2 + b2 - c2 - d2;
+	out[0][1] = 2.f * (b * c + a * d);
+	out[0][2] = 2.f * (b * d - a * c);
+	out[0][3] = 0.f;
+
+	out[1][0] = 2 * (b * c - a * d);
+	out[1][1] = a2 - b2 + c2 - d2;
+	out[1][2] = 2.f * (c * d + a * b);
+	out[1][3] = 0.f;
+
+	out[2][0] = 2.f * (b * d + a * c);
+	out[2][1] = 2.f * (c * d - a * b);
+	out[2][2] = a2 - b2 - c2 + d2;
+	out[2][3] = 0.f;
+
+}

@@ -162,6 +162,22 @@ void vector4d_set_angle_by_radians(Vector4D *out,float radians)
   out->y = sin(radians);
 }
 
+void vec3_scale(Vector3D* r, Vector3D* v, float scale) {
+	r->x = v->x * scale;
+	r->y = v->y * scale;
+	r->z = v->z * scale;
+}
+
+void vector4d_rotate(Vector4D* out, float radians, Vector3D axis) {
+	Vector3D *v = vector3d_new();
+	vec3_scale(v, &axis, sinf(radians / 2));
+	int i;
+	out->x = v->x;
+	out->y = v->y;
+	out->z = v->z;
+	out->w = cosf(radians / 2);
+}
+
 void vector2d_normalize (Vector2D *V)
 {
   float M;
@@ -582,5 +598,7 @@ void vector3d_cross_product(Vector3D *out, Vector3D v1, Vector3D v2)
   out->y = v1.z*v2.x - v1.x*v2.z;
   out->z = v1.x*v2.y - v1.y*v2.x;
 }
+
+
 
 /*eol@eof*/
