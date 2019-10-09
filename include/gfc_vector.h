@@ -346,4 +346,11 @@ void vector3d_rotate_about_z(Vector3D *vect, float angle);
  */
 void vector4d_rotate(Vector4D* out, float radians, Vector3D axis);
 
+/**
+* @brief calculate the perpendicular vector of another
+* @param dst the output result
+* @param src the vector to calculate the perpendicular of
+*/
+void vector3d_perpendicular(Vector3D* dst, Vector3D src);
+
 #endif

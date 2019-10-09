@@ -169,12 +169,12 @@ void vec3_scale(Vector3D* r, Vector3D* v, float scale) {
 }
 
 void vector4d_rotate(Vector4D* out, float radians, Vector3D axis) {
-	Vector3D *v = vector3d_new();
-	vec3_scale(v, &axis, sinf(radians / 2));
+	Vector3D v = vector3d(0.f,0.f,0.f);
+	vec3_scale(&v, &axis, sinf(radians / 2));
 	int i;
-	out->x = v->x;
-	out->y = v->y;
-	out->z = v->z;
+	out->x += v.x;
+	out->y += v.y;
+	out->z += v.z;
 	out->w = cosf(radians / 2);
 }
 

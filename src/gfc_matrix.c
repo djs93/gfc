@@ -7,10 +7,7 @@
 
 void gfc_matrix_slog(Matrix4 mat)
 {
-    slog("%f,%f,%f,%f",mat[0][0],mat[0][1],mat[0][2],mat[0][3]);
-    slog("%f,%f,%f,%f",mat[1][0],mat[1][1],mat[1][2],mat[1][3]);
-    slog("%f,%f,%f,%f",mat[2][0],mat[2][1],mat[2][2],mat[2][3]);
-    slog("%f,%f,%f,%f",mat[3][0],mat[3][1],mat[3][2],mat[3][3]);
+    slog("%f,%f,%f,%f\n%f,%f,%f,%f\n%f,%f,%f,%f\n%f,%f,%f,%f",mat[0][0],mat[0][1],mat[0][2],mat[0][3], mat[1][0], mat[1][1], mat[1][2], mat[1][3], mat[2][0], mat[2][1], mat[2][2], mat[2][3], mat[3][0], mat[3][1], mat[3][2], mat[3][3]);
 }
 
 void gfc_matrix_copy(
@@ -237,8 +234,8 @@ void gfc_matrix_translate(
     gfc_matrix_copy(out,temp);
 }
 
-void gfc_matrix_from_rotation(Matrix4 out, Vector4D rotation) {
-	float a = rotation.w;
+void gfc_matrix_from_rotation(Matrix4 out, Matrix4 original, Vector3D rotation) {
+	float a = 0.f;
 	float b = rotation.x;
 	float c = rotation.y;
 	float d = rotation.z;
@@ -262,4 +259,8 @@ void gfc_matrix_from_rotation(Matrix4 out, Vector4D rotation) {
 	out[2][2] = a2 - b2 - c2 + d2;
 	out[2][3] = 0.f;
 
+	out[3][0] = original[3][0];
+	out[3][1] = original[3][1];
+	out[3][2] = original[3][2];
+	out[3][3] = original[3][3];
 }
