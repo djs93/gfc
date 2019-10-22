@@ -363,4 +363,9 @@ void vector4d_rotate(Vector4D* out, float radians, Vector3D axis);
 */
 void vector3d_perpendicular(Vector3D* dst, Vector3D src);
 
+/**
+* @brief multiply one vector by another
+*/
+void vector2d_multiply(Vector2D* dst, Vector2D one, Vector2D two);
+
 #endif

@@ -150,8 +150,8 @@ void gfc_matrix_rotate(
 */
 void gfc_matrix_from_rotation(Matrix4 out, Matrix4 original, Vector3D rotation);
 
-mat2 mat2_multiply(mat2 matrix, float scalar);
-mat3 mat3_multiply(mat3 matrix, float scalar);
+mat2 mat2_multiply_scalar(mat2 matrix, float scalar);
+mat3 mat3_multiply_scalar(mat3 matrix, float scalar);
 
 Bool Multiply(float* out, float* matA, int aRows, int aCols, float* matB, int bRows, int bCols);
 mat2 mat2_multiply(mat2 matA, mat2 matB);

@@ -363,6 +363,12 @@ void vector3d_perpendicular( Vector3D *dst, Vector3D src )
   vector3d_normalize( dst );
 }
 
+void vector2d_multiply(Vector2D* dst, Vector2D one, Vector2D two)
+{
+	dst->x = one.x * two.x;
+	dst->y = one.y * two.y;
+}
+
 void rotation_concacenate(float in1[3][3], float in2[3][3], float out[3][3])
 {
   out[0][0] = in1[0][0] * in2[0][0] + in1[0][1] * in2[1][0] +
@@ -598,7 +604,5 @@ void vector3d_cross_product(Vector3D *out, Vector3D v1, Vector3D v2)
   out->y = v1.z*v2.x - v1.x*v2.z;
   out->z = v1.x*v2.y - v1.y*v2.x;
 }
-
-
 
 /*eol@eof*/

@@ -265,7 +265,7 @@ void gfc_matrix_from_rotation(Matrix4 out, Matrix4 original, Vector3D rotation) 
 	out[3][3] = original[3][3];
 }
 
-mat2 mat2_multiply(mat2 matrix, float scalar)
+mat2 mat2_multiply_scalar(mat2 matrix, float scalar)
 {
 	mat2 result;
     for (int i = 0; i < 4; ++i) {
@@ -274,7 +274,7 @@ mat2 mat2_multiply(mat2 matrix, float scalar)
     return result;
 }
 
-mat3 mat3_multiply(mat3 matrix, float scalar)
+mat3 mat3_multiply_scalar(mat3 matrix, float scalar)
 {
 	mat3 result;
 	for (int i = 0; i < 9; ++i) {
