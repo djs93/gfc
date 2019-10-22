@@ -30,15 +30,25 @@
  */
 typedef struct
 {
-  float x;
-  float y;
+	union {
+		struct {
+			float x;
+			float y;
+		};
+		float asArray[2];
+	};
 }Vector2D;
 
 typedef struct
 {
-  float x;
-  float y;
-  float z;
+	union {
+		struct {
+			float x;
+			float y;
+			float z;
+		};
+		float asArray[3];
+	};
 }Vector3D;
 
 typedef struct

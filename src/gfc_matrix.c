@@ -264,3 +264,87 @@ void gfc_matrix_from_rotation(Matrix4 out, Matrix4 original, Vector3D rotation) 
 	out[3][2] = original[3][2];
 	out[3][3] = original[3][3];
 }
+
+mat2 mat2_multiply(mat2 matrix, float scalar)
+{
+	mat2 result;
+    for (int i = 0; i < 4; ++i) {
+        result.asArray[i] = matrix.asArray[i] * scalar;
+    }
+    return result;
+}
+
+mat3 mat3_multiply(mat3 matrix, float scalar)
+{
+	mat3 result;
+	for (int i = 0; i < 9; ++i) {
+		result.asArray[i] = matrix.asArray[i] * scalar;
+	}
+	return result;
+}
+
+Bool Multiply(float* out, float* matA, int aRows, int aCols, float* matB, int bRows, int bCols)
+{
+	if (aCols != bRows) {
+		return false;
+	}
+	for (int i = 0; i < aRows; ++i) {
+		for (int j = 0; j < bCols; ++j) {
+			out[bCols * i + j] = 0.0f;
+			for (int k = 0; k < bRows; ++k) {
+				int a = aCols * i + k;
+				int b = bCols * k + j;
+				out[bCols * i + j] += matA[a] * matB[b];
+			}
+		}
+	}
+	return true;
+}
+
+mat2 mat2_multiply(mat2 matA, mat2 matB)
+{
+	mat2 res;
+	Multiply(res.asArray, matA.asArray,	2, 2, matB.asArray, 2, 2);
+	return res;
+}
+
+mat3 mat3_multiply(mat3 matA, mat3 matB)
+{
+	mat3 res;
+	Multiply(res.asArray, matA.asArray,	3, 3, matB.asArray, 3, 3);
+	return res;
+}
+
+void mat2_identity(mat2 one)
+{
+	one._11 = one._22 = 1.0f;
+	one._12 = one._21 = 0.0f;
+}
+
+void mat3_identity(mat3 one)
+{
+	one._11 = one._22 = one._33 = 1.0f;
+	one._12 = one._13 = one._21 = 0.0f;
+	one._23 = one._31 = one._32 = 0.0f;
+}
+
+void Transpose(float* srcMat, float* dstMat,
+	int srcRows, int srcCols) {
+	for (int i = 0; i < srcRows * srcCols; i++) {
+		int row = i / srcRows;
+		int col = i % srcRows;
+		dstMat[i] = srcMat[srcCols * col + row];
+	}
+}
+
+mat2 TransposeMat2(mat2 matrix) {
+	mat2 result;
+	Transpose(matrix.asArray, result.asArray, 2, 2);
+	return result;
+}
+
+mat3 TransposeMat3(mat3 matrix) {
+	mat3 result;
+	Transpose(matrix.asArray, result.asArray, 3, 3);
+	return result;
+}
