@@ -30,6 +30,14 @@ void Transpose(float* srcMat, float* dstMat, int srcRows, int srcCols);
 mat2 TransposeMat2(mat2 matrix);
 mat3 TransposeMat3(mat3 matrix);
 
+void Cofactor(float* out, float* minor, int rows, int cols);
+
+mat2 CutMat3(mat3 mat, int row, int col);
+mat3 Minor(mat3 mat);
+mat3 CofactorMat3(mat3 mat);
+float DeterminantMat3(mat3 matrix);
+float DeterminantMat2(mat2 matrix);
+
 typedef struct
 {
     Matrix4 model;

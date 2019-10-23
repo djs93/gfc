@@ -348,3 +348,64 @@ mat3 TransposeMat3(mat3 matrix) {
 	Transpose(matrix.asArray, result.asArray, 3, 3);
 	return result;
 }
+
+void Cofactor(float* out, float* minor, int rows, int cols)
+{
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < cols; ++j) {
+			out[cols * j + i] = minor[cols * j + i] * powf(-1.0f, i + j);
+		}
+	}
+}
+
+mat2 CutMat3(mat3 mat, int row, int col)
+{
+	mat2 result;
+	int index = 0;
+
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			if (i == row || j == col) {
+				continue;
+			}
+			result.asArray[index++] = mat.asArray[3 * i + j];
+		}
+	}
+
+	return result;
+}
+
+mat3 Minor(mat3 mat)
+{
+	mat3 result;
+
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			result.asArray[3*i+j] = DeterminantMat2(CutMat3(mat, i, j));
+		}
+	}
+
+	return result;
+}
+
+mat3 CofactorMat3(mat3 mat) {
+	mat3 result;
+	Cofactor(result.asArray, Minor(mat).asArray, 3, 3);
+	return result;
+}
+
+float DeterminantMat2(mat2 matrix) {
+	return matrix._11 * matrix._22 - matrix._12 * matrix._21;
+}
+
+float DeterminantMat3(mat3 matrix)
+{
+	float result = 0.0f;
+
+	mat3 cofactor = CofactorMat3(matrix);
+	for (int j = 0; j < 3; ++j) {
+		result += matrix.asArray[j] * cofactor.asArray[j];
+	}
+
+	return result;
+}
