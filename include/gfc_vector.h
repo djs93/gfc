@@ -30,8 +30,13 @@
  */
 typedef struct
 {
-  float x;
-  float y;
+	union {
+		struct {
+			float x;
+			float y;
+		};
+		float asArray[2];
+	};
 }Vector2D;
 
 typedef struct
@@ -324,6 +329,8 @@ void vector3d_angle_vectors(Vector3D angles, Vector3D *forward, Vector3D *right,
  * @return the new vector
  */
 Vector2D vector2d_rotate(Vector2D in, float angle);
+
+void vector2d_multiply(Vector2D* dst, Vector2D one, Vector2D two);
 
 /**
  * @brief rotate an Vector3D about another vector
