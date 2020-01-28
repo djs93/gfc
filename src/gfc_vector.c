@@ -605,10 +605,4 @@ void vector3d_cross_product(Vector3D *out, Vector3D v1, Vector3D v2)
   out->z = v1.x*v2.y - v1.y*v2.x;
 }
 
-void vector2d_multiply(Vector2D* dst, Vector2D one, Vector2D two)
-{
-	dst->x = one.x * two.x;
-	dst->y = one.y * two.y;
-}
-
 /*eol@eof*/
