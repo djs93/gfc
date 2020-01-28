@@ -5,6 +5,39 @@
 
 typedef float Matrix4[4][4];
 
+typedef struct mat2 {
+	union {
+		struct {
+			float _11, _12,
+				_21, _22;
+		};
+		float asArray[4];
+	};
+} mat2;
+
+typedef struct mat3 {
+	union {
+		struct {
+			float _11, _12, _13,
+				_21, _22, _23,
+				_31, _32, _33;
+		};
+		float asArray[9];
+	};
+} mat3;
+
+void Transpose(float* srcMat, float* dstMat, int srcRows, int srcCols);
+mat2 TransposeMat2(mat2 matrix);
+mat3 TransposeMat3(mat3 matrix);
+
+void Cofactor(float* out, float* minor, int rows, int cols);
+
+mat2 CutMat3(mat3 mat, int row, int col);
+mat3 Minor(mat3 mat);
+mat3 CofactorMat3(mat3 mat);
+float DeterminantMat3(mat3 matrix);
+float DeterminantMat2(mat2 matrix);
+
 typedef struct
 {
     Matrix4 model;
@@ -117,5 +150,31 @@ void gfc_matrix_rotate(
     float       degree,
     Vector3D    axis
 );
+
+/**
+* @brief return a matrix based on the given rotation
+* @param out the output matrix
+* @param rotation the rotation wished to be applied to the matrix
+*/
+void gfc_matrix_from_rotation(Matrix4 out, Matrix4 original, Vector3D rotation);
+
+mat2 mat2_multiply_scalar(mat2 matrix, float scalar);
+mat3 mat3_multiply_scalar(mat3 matrix, float scalar);
+
+Bool Multiply(float* out, float* matA, int aRows, int aCols, float* matB, int bRows, int bCols);
+mat2 mat2_multiply(mat2 matA, mat2 matB);
+mat3 mat3_multiply(mat3 matA, mat3 matB);
+
+/**
+ * @brief set the matrix to an identity matrix
+ * @param one the matrix to become an identity
+ */
+void mat2_identity(mat2 one);
+
+/**
+ * @brief set the matrix to an identity matrix
+ * @param one the matrix to become an identity
+ */
+void mat3_identity(mat3 one);
 
 #endif

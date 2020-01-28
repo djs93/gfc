@@ -41,9 +41,14 @@ typedef struct
 
 typedef struct
 {
-  float x;
-  float y;
-  float z;
+	union {
+		struct {
+			float x;
+			float y;
+			float z;
+		};
+		float asArray[3];
+	};
 }Vector3D;
 
 typedef struct
@@ -344,5 +349,25 @@ void vector3d_rotate_about_vector(Vector3D *dst, Vector3D dir, Vector3D point, f
 void vector3d_rotate_about_x(Vector3D *vect, float angle);
 void vector3d_rotate_about_y(Vector3D *vect, float angle);
 void vector3d_rotate_about_z(Vector3D *vect, float angle);
+
+/**
+ * @brief rotate a Vector4D about an axis
+ * @param out output result
+ * @param radians how far to rotate
+ * @param axis the axis to rotate around
+ */
+void vector4d_rotate(Vector4D* out, float radians, Vector3D axis);
+
+/**
+* @brief calculate the perpendicular vector of another
+* @param dst the output result
+* @param src the vector to calculate the perpendicular of
+*/
+void vector3d_perpendicular(Vector3D* dst, Vector3D src);
+
+/**
+* @brief multiply one vector by another
+*/
+void vector2d_multiply(Vector2D* dst, Vector2D one, Vector2D two);
 
 #endif

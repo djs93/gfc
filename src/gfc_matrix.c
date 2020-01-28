@@ -7,10 +7,7 @@
 
 void gfc_matrix_slog(Matrix4 mat)
 {
-    slog("%f,%f,%f,%f",mat[0][0],mat[0][1],mat[0][2],mat[0][3]);
-    slog("%f,%f,%f,%f",mat[1][0],mat[1][1],mat[1][2],mat[1][3]);
-    slog("%f,%f,%f,%f",mat[2][0],mat[2][1],mat[2][2],mat[2][3]);
-    slog("%f,%f,%f,%f",mat[3][0],mat[3][1],mat[3][2],mat[3][3]);
+    slog("%f,%f,%f,%f\n%f,%f,%f,%f\n%f,%f,%f,%f\n%f,%f,%f,%f",mat[0][0],mat[0][1],mat[0][2],mat[0][3], mat[1][0], mat[1][1], mat[1][2], mat[1][3], mat[2][0], mat[2][1], mat[2][2], mat[2][3], mat[3][0], mat[3][1], mat[3][2], mat[3][3]);
 }
 
 void gfc_matrix_copy(
@@ -235,4 +232,180 @@ void gfc_matrix_translate(
     gfc_matrix_make_translation(translate,move);
     gfc_matrix_multiply(temp,translate,out);
     gfc_matrix_copy(out,temp);
+}
+
+void gfc_matrix_from_rotation(Matrix4 out, Matrix4 original, Vector3D rotation) {
+	float a = 0.f;
+	float b = rotation.x;
+	float c = rotation.y;
+	float d = rotation.z;
+	float a2 = a * a;
+	float b2 = b * b;
+	float c2 = c * c;
+	float d2 = d * d;
+
+	out[0][0] = a2 + b2 - c2 - d2;
+	out[0][1] = 2.f * (b * c + a * d);
+	out[0][2] = 2.f * (b * d - a * c);
+	out[0][3] = 0.f;
+
+	out[1][0] = 2 * (b * c - a * d);
+	out[1][1] = a2 - b2 + c2 - d2;
+	out[1][2] = 2.f * (c * d + a * b);
+	out[1][3] = 0.f;
+
+	out[2][0] = 2.f * (b * d + a * c);
+	out[2][1] = 2.f * (c * d - a * b);
+	out[2][2] = a2 - b2 - c2 + d2;
+	out[2][3] = 0.f;
+
+	out[3][0] = original[3][0];
+	out[3][1] = original[3][1];
+	out[3][2] = original[3][2];
+	out[3][3] = original[3][3];
+}
+
+mat2 mat2_multiply_scalar(mat2 matrix, float scalar)
+{
+	mat2 result;
+    for (int i = 0; i < 4; ++i) {
+        result.asArray[i] = matrix.asArray[i] * scalar;
+    }
+    return result;
+}
+
+mat3 mat3_multiply_scalar(mat3 matrix, float scalar)
+{
+	mat3 result;
+	for (int i = 0; i < 9; ++i) {
+		result.asArray[i] = matrix.asArray[i] * scalar;
+	}
+	return result;
+}
+
+Bool Multiply(float* out, float* matA, int aRows, int aCols, float* matB, int bRows, int bCols)
+{
+	if (aCols != bRows) {
+		return false;
+	}
+	for (int i = 0; i < aRows; ++i) {
+		for (int j = 0; j < bCols; ++j) {
+			out[bCols * i + j] = 0.0f;
+			for (int k = 0; k < bRows; ++k) {
+				int a = aCols * i + k;
+				int b = bCols * k + j;
+				out[bCols * i + j] += matA[a] * matB[b];
+			}
+		}
+	}
+	return true;
+}
+
+mat2 mat2_multiply(mat2 matA, mat2 matB)
+{
+	mat2 res;
+	Multiply(res.asArray, matA.asArray,	2, 2, matB.asArray, 2, 2);
+	return res;
+}
+
+mat3 mat3_multiply(mat3 matA, mat3 matB)
+{
+	mat3 res;
+	Multiply(res.asArray, matA.asArray,	3, 3, matB.asArray, 3, 3);
+	return res;
+}
+
+void mat2_identity(mat2 one)
+{
+	one._11 = one._22 = 1.0f;
+	one._12 = one._21 = 0.0f;
+}
+
+void mat3_identity(mat3 one)
+{
+	one._11 = one._22 = one._33 = 1.0f;
+	one._12 = one._13 = one._21 = 0.0f;
+	one._23 = one._31 = one._32 = 0.0f;
+}
+
+void Transpose(float* srcMat, float* dstMat,
+	int srcRows, int srcCols) {
+	for (int i = 0; i < srcRows * srcCols; i++) {
+		int row = i / srcRows;
+		int col = i % srcRows;
+		dstMat[i] = srcMat[srcCols * col + row];
+	}
+}
+
+mat2 TransposeMat2(mat2 matrix) {
+	mat2 result;
+	Transpose(matrix.asArray, result.asArray, 2, 2);
+	return result;
+}
+
+mat3 TransposeMat3(mat3 matrix) {
+	mat3 result;
+	Transpose(matrix.asArray, result.asArray, 3, 3);
+	return result;
+}
+
+void Cofactor(float* out, float* minor, int rows, int cols)
+{
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < cols; ++j) {
+			out[cols * j + i] = minor[cols * j + i] * powf(-1.0f, i + j);
+		}
+	}
+}
+
+mat2 CutMat3(mat3 mat, int row, int col)
+{
+	mat2 result;
+	int index = 0;
+
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			if (i == row || j == col) {
+				continue;
+			}
+			result.asArray[index++] = mat.asArray[3 * i + j];
+		}
+	}
+
+	return result;
+}
+
+mat3 Minor(mat3 mat)
+{
+	mat3 result;
+
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			result.asArray[3*i+j] = DeterminantMat2(CutMat3(mat, i, j));
+		}
+	}
+
+	return result;
+}
+
+mat3 CofactorMat3(mat3 mat) {
+	mat3 result;
+	Cofactor(result.asArray, Minor(mat).asArray, 3, 3);
+	return result;
+}
+
+float DeterminantMat2(mat2 matrix) {
+	return matrix._11 * matrix._22 - matrix._12 * matrix._21;
+}
+
+float DeterminantMat3(mat3 matrix)
+{
+	float result = 0.0f;
+
+	mat3 cofactor = CofactorMat3(matrix);
+	for (int j = 0; j < 3; ++j) {
+		result += matrix.asArray[j] * cofactor.asArray[j];
+	}
+
+	return result;
 }

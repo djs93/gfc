@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL.h>
+#include <stdio.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
