@@ -89,6 +89,14 @@ int gfc_list_delete_last(List *list);
 int gfc_list_delete_data(List *list,void *data);
 
 /**
+ * @brief finds if a pointer to data exists in the list already
+ * @param list the list to search for the element from
+ * @param data used to match against
+ * @return -1 if not in list, index otherwise
+ */
+int gfc_list_in_list(List* list, void* data);
+
+/**
  * @brief get the number of tracked elements in the list
  * @param list the list the check
  * @return the count in the list.  Will be zero if list was NULL

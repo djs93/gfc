@@ -94,5 +94,5 @@ void gfc_input_set_callbacks(
     void *data
 );
 
-
+void gfc_command_trigger(const char* name, InputEventType state);
 #endif

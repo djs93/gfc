@@ -214,6 +214,28 @@ int gfc_list_delete_nth(List *list,Uint32 n)
     return 0;
 }
 
+int gfc_list_in_list(List* list, void* data)
+{
+    int i;
+    if (!list)
+    {
+        slog("no list provided");
+        return -1;
+    }
+    if (!data) {
+        slog("no data provided");
+        return -1;
+    }
+    for (i = 0; i < list->count; i++)
+    {
+        if (list->elements[i].data == data)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
 Uint32 gfc_list_get_count(List *list)
 {
     if (!list)return 0;

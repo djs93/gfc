@@ -129,6 +129,38 @@ void gfc_input_update_command(Input *command)
     }
 }
 
+void gfc_command_trigger(const char* name, InputEventType state) {
+    Input* in;
+    in = gfc_input_get_by_name(name);
+    if (!in) {
+        slog("invalid command %s!", name);
+        return;
+    }
+    switch (state)
+    {
+    case IET_Hold:
+        if (!in->onHold) {
+            break;
+        }
+        in->onHold(in->data);
+            break;
+    case IET_Press:
+        if (!in->onPress) {
+            break;
+        }
+        in->onPress(in->data);
+        break;
+    case IET_Release:
+        if (!in->onRelease) {
+            break;
+        }
+        in->onRelease(in->data);
+        break;
+    default:
+        break;
+    }
+}
+
 Input *gfc_input_get_by_name(const char *name)
 {
     Uint32 c,i;
@@ -477,10 +509,10 @@ void gfc_input_parse_command_json(SJson *command)
 #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
         if (kc != -1)
         {
-            gfc_list_append(in->keyCodes,(void *)kc);
+            in->keyCodes = gfc_list_append(in->keyCodes,(void *)kc);
         }
     }
-    gfc_list_append(gfc_input_list,(void *)in);
+    gfc_input_list = gfc_list_append(gfc_input_list,(void *)in);
 }
 
 void gfc_input_commands_load(char *configFile)
